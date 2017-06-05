@@ -10,6 +10,7 @@ import scala.concurrent.Future
 
 case class Car(id: Option[Long], title: String, fuel: String, price: Long, isNew: Boolean, mileage: Option[Long], firstReg: Option[Date])
 
+
 class CarTable(tag: Tag) extends Table[Car](tag, "cars") {
 
   def id: Rep[Long] = column[Long]("id", O.PrimaryKey, O.AutoInc)

@@ -41,5 +41,9 @@ libraryDependencies ++= List(
   "mysql" % "mysql-connector-java" % "5.1.39"
 )
 
+libraryDependencies += "org.springframework.boot" % "spring-boot-starter-web" % "1.5.3.RELEASE"
+
+libraryDependencies += "com.typesafe.play" %% "play-json" % "2.5.15"
+
 //scala test library
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"
