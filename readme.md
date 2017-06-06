@@ -62,7 +62,7 @@ car-market{
 |car-market.ws-port|Int| Port number for web server to run on|
 
 ## Run
-- Before running the web-server, make sure that required database and tables are created. Use (create_db.sql)[1] file to easily initialize database and tables. 
+- Before running the web-server, make sure that required database and tables are created. Use [create_db.sql][1] file to easily initialize database and tables. 
 
 - Execute the following command on Unix environment:
 
