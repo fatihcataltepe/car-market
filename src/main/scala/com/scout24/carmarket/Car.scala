@@ -9,7 +9,17 @@ import slick.lifted.TableQuery
 import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-final case class Car(id: Option[Long], title: String, fuel: String, price: Long, isNew: Boolean, mileage: Option[Long], firstReg: Option[Date])
+final case class Car(id: Option[Long], title: String, fuel: String, price: Long, isNew: Boolean, mileage: Option[Long], firstReg: Option[Date]){
+
+  def isValid: Boolean = {
+    (isNew, mileage, firstReg) match {
+      case (true, None, None) => true
+      case (false, Some(_), Some(_)) => true
+      case _=> false
+
+    }
+  }
+}
 
 class CarTable(tag: Tag) extends Table[Car](tag, "cars") {
 

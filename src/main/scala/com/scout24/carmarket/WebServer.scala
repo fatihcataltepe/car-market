@@ -42,10 +42,17 @@ class WebServer(props: WebServerProps) extends LazyLogging with JsonSupport {
           post {
             entity(as[Car]) { car =>
               logger.debug(s"Method: POST, route: /cars, car: $car")
-              val insertF: Future[Unit] = repo.insert(car)
-              onComplete(insertF) {
-                case Success(_) => complete(StatusCodes.OK)
-                case Failure(e) => complete(CustomStatusCodes.create400(e))
+
+              if(car.isValid){ //car validation
+                val insertF: Future[Unit] = repo.insert(car)
+                onComplete(insertF) {
+                  case Success(_) => complete(StatusCodes.OK)
+                  case Failure(e) => complete(CustomStatusCodes.create400(e))
+                }
+              }
+              else{
+                logger.debug(s"Invalid car: $car")
+                complete(CustomStatusCodes.create400("Car is not valid: Used cars must have mileage and firstReg fields, new cars must not"))
               }
             }
           }
@@ -71,11 +78,18 @@ class WebServer(props: WebServerProps) extends LazyLogging with JsonSupport {
             put {
               entity(as[Car]) { car =>
                 logger.debug(s"Method: PUT, route: /cars/$id car: $car")
-                val updateF: Future[Int] = repo.updateCar(id, car)
-                onComplete(updateF) {
-                  case Success(1) => complete(StatusCodes.OK)
-                  case Success(0) => complete(CustomStatusCodes.create500("An error occured in the database"))
-                  case Failure(e) => complete(CustomStatusCodes.create500(e))
+
+                if(car.isValid){ //car validation
+                  val updateF: Future[Int] = repo.updateCar(id, car)
+                  onComplete(updateF) {
+                    case Success(1) => complete(StatusCodes.OK)
+                    case Success(0) => complete(CustomStatusCodes.create500("An error occured in the database"))
+                    case Failure(e) => complete(CustomStatusCodes.create500(e))
+                  }
+                }
+                else{
+                  logger.debug(s"Invalid car: $car")
+                  complete(CustomStatusCodes.create400("Car is not valid: Used cars must have mileage and firstReg fields, new cars must not"))
                 }
               }
             }
@@ -88,8 +102,8 @@ class WebServer(props: WebServerProps) extends LazyLogging with JsonSupport {
       case Failure(e) => logger.error("Web server crashed", e)
 
     }
-  }
 
+  }
 
 }
 
