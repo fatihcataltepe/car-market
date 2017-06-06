@@ -6,13 +6,13 @@ import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
+import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.Future
-import scala.io.StdIn
 import scala.util.{Failure, Success}
 
 
-class WebServer(props: WebServerProps) extends JsonSupport {
+class WebServer(props: WebServerProps) extends LazyLogging with JsonSupport {
 
   def run: Unit = {
     implicit val system = ActorSystem()
@@ -25,6 +25,7 @@ class WebServer(props: WebServerProps) extends JsonSupport {
       path("cars") {
         get {
           parameter("sort" ? "id") { sortType =>
+            logger.debug(s"Method: GET, route: /cars, sort: $sortType")
             val getCarsF: Future[Seq[Car]] = repo.getCars
             onComplete(getCarsF) {
               case Success(x) if sortType == "title" => complete(StatusCodes.OK, x.sortBy(_.title))
@@ -39,7 +40,8 @@ class WebServer(props: WebServerProps) extends JsonSupport {
           }
         } ~
           post {
-            entity(as[Car]) { car => // will unmarshal JSON to Order
+            entity(as[Car]) { car =>
+              logger.debug(s"Method: POST, route: /cars, car: $car")
               val insertF: Future[Unit] = repo.insert(car)
               onComplete(insertF) {
                 case Success(_) => complete(StatusCodes.OK)
@@ -50,6 +52,7 @@ class WebServer(props: WebServerProps) extends JsonSupport {
       } ~
         path("cars" / LongNumber) { id =>
           get {
+            logger.debug(s"Method: GET, route: /cars/$id")
             val getCarF: Future[Option[Car]] = repo.getCar(id)
             onComplete(getCarF) {
               case Success(Some(x)) => complete(StatusCodes.OK, x)
@@ -58,6 +61,7 @@ class WebServer(props: WebServerProps) extends JsonSupport {
             }
           } ~
             delete {
+              logger.debug(s"Method: DELETE, route: /cars/$id")
               val deleteF: Future[Unit] = repo.delete(id)
               onComplete(deleteF) {
                 case Success(_) => complete(StatusCodes.OK)
@@ -66,6 +70,7 @@ class WebServer(props: WebServerProps) extends JsonSupport {
             } ~
             put {
               entity(as[Car]) { car =>
+                logger.debug(s"Method: PUT, route: /cars/$id car: $car")
                 val updateF: Future[Int] = repo.updateCar(id, car)
                 onComplete(updateF) {
                   case Success(1) => complete(StatusCodes.OK)
@@ -76,13 +81,13 @@ class WebServer(props: WebServerProps) extends JsonSupport {
             }
         }
 
-    val bindingFuture = Http().bindAndHandle(route, props.host, props.port)
+    val bindingFuture: Future[Http.ServerBinding] = Http().bindAndHandle(route, props.host, props.port)
 
-    println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
-    StdIn.readLine() // let it run until user presses return
-    bindingFuture
-      .flatMap(_.unbind()) // trigger unbinding from the port
-      .onComplete(_ => system.terminate()) // and shutdown when done
+    bindingFuture.onComplete {
+      case Success(x) => logger.info(s"Web server started at http://${props.host}:${props.port}")
+      case Failure(e) => logger.error("Web server crashed", e)
+
+    }
   }
 
 

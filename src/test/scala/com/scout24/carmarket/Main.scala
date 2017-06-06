@@ -1,8 +1,8 @@
 package com.scout24.carmarket
 
 //to test the main application
-object Main extends App {
+object MainTest extends App {
 
-  WebServer.main(Array())
+  Main.main(Array())
 
 }
