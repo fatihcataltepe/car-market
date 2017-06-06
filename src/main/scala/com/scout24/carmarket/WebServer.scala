@@ -1,39 +1,20 @@
 package com.scout24.carmarket
 
 
-import java.sql.Date
-
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
-import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
-import spray.json.{DefaultJsonProtocol, DeserializationException, JsString, JsValue, RootJsonFormat}
 
 import scala.concurrent.Future
 import scala.io.StdIn
 import scala.util.{Failure, Success}
 
 
-trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {
+class WebServer(props: WebServerProps) extends JsonSupport {
 
-  implicit object DateJsonFormat extends RootJsonFormat[Date] {
-
-    override def read(json: JsValue): Date = json match {
-      case JsString(s) => Date.valueOf(s)
-      case _ => throw new DeserializationException("Error info you want here ...")
-    }
-
-    override def write(obj: Date): JsValue = JsString(obj.toString)
-  }
-
-  implicit val carFormat = jsonFormat7(Car)
-}
-
-object WebServer extends JsonSupport {
-  def main(args: Array[String]): Unit = {
-
+  def run: Unit = {
     implicit val system = ActorSystem()
     implicit val materializer = ActorMaterializer()
     implicit val executionContext = system.dispatcher
@@ -95,7 +76,7 @@ object WebServer extends JsonSupport {
             }
         }
 
-    val bindingFuture = Http().bindAndHandle(route, "localhost", 8080)
+    val bindingFuture = Http().bindAndHandle(route, props.host, props.port)
 
     println(s"Server online at http://localhost:8080/\nPress RETURN to stop...")
     StdIn.readLine() // let it run until user presses return
@@ -105,4 +86,8 @@ object WebServer extends JsonSupport {
   }
 
 
+}
+
+object WebServer {
+  def apply(props: WebServerProps): WebServer = new WebServer(props)
 }
