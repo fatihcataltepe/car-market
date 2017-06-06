@@ -1,4 +1,4 @@
-package com.scout24.carmarket
+package com.scout24.carmarket.db
 
 import org.scalatest.FunSpec
 

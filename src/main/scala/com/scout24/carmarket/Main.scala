@@ -1,5 +1,6 @@
 package com.scout24.carmarket
 
+import com.scout24.carmarket.ws.{WebServer, WebServerProps}
 import com.typesafe.config.ConfigFactory
 import com.typesafe.scalalogging.LazyLogging
 

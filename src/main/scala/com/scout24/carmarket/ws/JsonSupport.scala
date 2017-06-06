@@ -1,8 +1,9 @@
-package com.scout24.carmarket
+package com.scout24.carmarket.ws
 
 import java.sql.Date
 
 import akka.http.scaladsl.marshallers.sprayjson.SprayJsonSupport
+import com.scout24.carmarket.db.Car
 import spray.json.{DefaultJsonProtocol, DeserializationException, JsString, JsValue, RootJsonFormat}
 
 trait JsonSupport extends SprayJsonSupport with DefaultJsonProtocol {

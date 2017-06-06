@@ -1,11 +1,11 @@
-package com.scout24.carmarket
-
+package com.scout24.carmarket.ws
 
 import akka.actor.ActorSystem
 import akka.http.scaladsl.Http
 import akka.http.scaladsl.model.StatusCodes
 import akka.http.scaladsl.server.Directives._
 import akka.stream.ActorMaterializer
+import com.scout24.carmarket.db.{Car, CarRepo}
 import com.typesafe.scalalogging.LazyLogging
 
 import scala.concurrent.Future
