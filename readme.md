@@ -80,6 +80,8 @@ bin/car-market
 bin/car-market.bat
 ```
 
+> Note: 
+> If you want to run this application in a IDE(IntelliJ IDEA etc.) you should run `MainTest.scala` class since the resource folders exist under test directory.
 ## Web Interfaces
 
 In this project there are 5 services available to manipulate the `cars` table. A car object is as following
