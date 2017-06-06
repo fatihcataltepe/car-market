@@ -95,6 +95,8 @@ _Valid Car:_ New cars shouldn't have mileage and firstRef fields. On the other h
 
 Returns a list of all cars. Takes a sort type as optional. If it does not exist, or invalid, the default will be taken as `car.id` 
 
+> Supported sort types: `id`, `title`, `fuel`, `price`, `isNew`, `mileage`, `firstReg`
+
 *Sample Response*
 
 ```json
