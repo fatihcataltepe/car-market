@@ -62,7 +62,7 @@ car-market{
 |car-market.ws-port|Int| Port number for web server to run on|
 
 ## Run
-- Before running the web-server, make sure that required database and tables are created. Use (create_db.sql)[create_db.sql] file to easily initialize database and tables. 
+- Before running the web-server, make sure that required database and tables are created. Use (create_db.sql)[1] file to easily initialize database and tables. 
 
 - Execute the following command on Unix environment:
 
@@ -205,6 +205,7 @@ Needs a valid car json in its body:
   Therefore, while inserting a car into `cars` table, if the fuel type does not exist in the `fuels` table, the insert or update operation fails. 
 
 
+[1]: https://github.com/fatihcataltepe/car-market/blob/master/create_db.sql
 
 
 
