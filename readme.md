@@ -189,6 +189,27 @@ Needs a valid car json in its body:
 - If the operation fails, returns 500 with an error message,
 - If the operation successful, returns 200 without any content
 
+## Database Structure
+There are 2 tables in database: users and fuels.
+To eaily initialize this database run [create_db.sql][1] in a database IDE. (DataGrip etc.)
+
+### 1. Fuels
+
+|field|type| notes|
+|---|---|---|
+|name|varchar(100)| primary key|
+
+### 2. Cars
+|field|type| notes|
+|---|---|---|
+|id|int(11)| primary key|
+|title|varchar(200)| not null|
+|fuel|varchar(100)| not null, foreign key|
+|price|int(100)| not null|
+|isNew|boolean| not null|
+|mileage|int(11)| |
+|firstReg|date| "yyyy-mm-dd" format|
+
 ## Dependencies
 
 - "ch.qos.logback" % "logback-classic" % "1.1.7"
