@@ -41,5 +41,13 @@ libraryDependencies ++= List(
   "mysql" % "mysql-connector-java" % "5.1.39"
 )
 
+//akka=http
+libraryDependencies ++= Seq(
+  "com.typesafe.akka" %% "akka-http" % "10.0.6",
+  "com.typesafe.akka" %% "akka-http-spray-json" % "10.0.3",
+  "com.typesafe.akka" %% "akka-http-testkit" % "10.0.6" % Test
+)
+
+
 //scala test library
 libraryDependencies += "org.scalatest" %% "scalatest" % "3.0.0" % "test"

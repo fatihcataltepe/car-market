@@ -6,9 +6,10 @@ import slick.dbio.DBIO
 import slick.driver.MySQLDriver.api._
 import slick.lifted.TableQuery
 
+import scala.concurrent.ExecutionContext.Implicits.global
 import scala.concurrent.Future
 
-case class Car(id: Option[Long], title: String, fuel: String, price: Long, isNew: Boolean, mileage: Option[Long], firstReg: Option[Date])
+final case class Car(id: Option[Long], title: String, fuel: String, price: Long, isNew: Boolean, mileage: Option[Long], firstReg: Option[Date])
 
 class CarTable(tag: Tag) extends Table[Car](tag, "cars") {
 
@@ -46,5 +47,12 @@ case class CarRepo() extends {
   def getCar(id: Long): Future[Option[Car]] = db.run(table.filter(_.id === id).result.headOption)
 
   def getCars: Future[Seq[Car]] = db.run(table.result)
+
+  def updateCar(id: Long, car: Car): Future[Int] = {
+    val selectQ = table.filter(_.id === id)
+    val newCar = Car(Some(id), car.title, car.fuel, car.price, car.isNew, car.mileage, car.firstReg)
+    val query = selectQ.result.head.flatMap { _ => selectQ.update(newCar) }
+    db.run(query)
+  }
 
 }
