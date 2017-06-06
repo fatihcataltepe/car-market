@@ -23,7 +23,7 @@ mappings in Universal += {
 }
 
 mappings in Universal += {
-  file("Readme.md") -> "Readme.md"
+  file("readme.md") -> "readme.md"
 }
 
 
