@@ -84,7 +84,7 @@ bin/car-market.bat
 > If you want to run this application in a IDE(IntelliJ IDEA etc.) you should run `MainTest.scala` class since the resource folders exist under test directory.
 ## Web Interfaces
 
-In this project there are 5 services available to manipulate the `cars` table. A car object is as following
+In this project there are 5 services available to manipulate the `cars` table. A car object is as following:
 
 ```scala
 case class Car(id: Option[Long], title: String, fuel: String, price: Long, isNew: Boolean, mileage: Option[Long], firstReg: Option[java.sql.Date])
@@ -93,7 +93,7 @@ _Valid Car:_ New cars shouldn't have mileage and firstRef fields. On the other h
  
 ### 1. GET /cars?sort={sort_type}
 
-Returns a list of all cars. Takes a sort type as optional. If it does not exist, or invalid, the default will be taken as `car.id` 
+Returns the list of all cars. Takes an optional sort type. If the support type does not exist, or invalid, the default will be `car.id` 
 
 > Supported sort types: `id`, `title`, `fuel`, `price`, `isNew`, `mileage`, `firstReg`
 
@@ -148,7 +148,7 @@ Takes a valid car object in its body, and inserts it into database.
 
 ### 3. GET /cars/{id}
 
-Returns the car with given id as json.
+Returns the specified car as json.
 
 *Sample Responses*
 
@@ -167,7 +167,7 @@ Returns the car with given id as json.
 
 ### 4. DELETE /cars/{id}
 
-Deletes the car with given id
+Deletes the specified car
 
 *Sample Responses*
 - If operation is successful, returns 200 without any content
@@ -209,7 +209,7 @@ To eaily initialize this database run [create_db.sql][1] in a database IDE. (Dat
 |id|int(11)| primary key|
 |title|varchar(200)| not null|
 |fuel|varchar(100)| not null, foreign key|
-|price|int(100)| not null|
+|price|int(11)| not null|
 |isNew|boolean| not null|
 |mileage|int(11)| |
 |firstReg|date| "yyyy-mm-dd" format|
